@@ -72,6 +72,23 @@ vpcid='vpc-c1e040a5'
 
 
 
+update `env.config`
+
+```
+export AWS_PROFILE='bjs'
+export AWS_DEFAULT_REGION='cn-north-1'
+export AWS_REGION=${AWS_DEFAULT_REGION}
+export KOPS_STATE_STORE=s3://pahud-kops-state-store
+```
+
+1. **AWS_PROFILE** - make sure the profile name points to your AWS Beijing Region configuration. Check *~/.aws/config* for details.
+
+2. **AWS_DEFAULT_REGION** - specify *cn-north-1* for Beijing Region.
+
+3. **KOPS_STATE_STORE** - you need specify an empty S3 bucket for Kops state store, make sure you change the value and points to your S3 bucket in Beijing Region.
+
+   ​
+
 execute the script to create the cluster:
 
 ```
