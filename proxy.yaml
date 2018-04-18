@@ -1,0 +1,6 @@
+spec:
+  egressProxy:
+    httpProxy:
+      host: <host>
+      port: <port>
+    excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com

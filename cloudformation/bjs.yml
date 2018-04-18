@@ -1,0 +1,429 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 key pair to enable SSH access to the ECS
+      instances.
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select a default VPC ID.
+  VpcCidr:
+    Type: String
+    Description: VPC Cidr range(e.g. 172.31.0.0/16)
+    Default: 172.31.0.0/16
+  SubnetIDs:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Select a default subnet ID in your selected VPC.
+  ProxyListenPort:
+    Type: Number
+    Default: '8888'
+    Description: The port proxy is listening  
+  DockerRegistryMirror:
+    Type: String
+    Default: 'https://i1repedl.mirror.aliyuncs.com'
+    Description: docker registry mirror(if applicable) 
+  RemoteGostServiceEndpoint:
+    Type: String
+    Description: remote gost service endpoint string
+  DesiredCapacity:
+    Type: Number
+    Default: '1'
+    Description: Number of instances to launch
+  MaxSize:
+    Type: Number
+    Default: '1'
+    Description: Maximum number of instances that can be launched
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - i3.xlarge
+      - i3.2xlarge
+      - i3.4xlarge
+      - i3.8xlarge
+      - i3.16xlarge
+    ConstraintDescription: Please choose a valid instance type.
+Mappings:
+  AWSRegionToAMI:
+    cn-north-1:
+      AMIID: ami-d8578bb5
+Resources:
+  ProxySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Kops Proxy Security Group
+      VpcId: !Ref 'VpcId'
+  ProxySecurityGroupHTTPinbound:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref 'ProxySecurityGroup'
+      IpProtocol: tcp
+      FromPort: !Ref ProxyListenPort
+      ToPort: !Ref ProxyListenPort
+      CidrIp: !Ref VpcCidr
+
+  # ProxySecurityGroupHTTPinbound2:
+  #   Type: AWS::EC2::SecurityGroupIngress
+  #   Properties:
+  #     GroupId: !Ref 'ProxySecurityGroup'
+  #     IpProtocol: tcp
+  #     FromPort: !Ref ProxyListenPort
+  #     ToPort: !Ref ProxyListenPort
+  #     SourceSecurityGroupId: !Ref 'ProxySecurityGroup'
+
+
+  # CloudwatchLogsGroup:
+  #   Type: AWS::Logs::LogGroup
+  #   Properties:
+  #     LogGroupName: !Join ['-', [ECSLogGroup, !Ref 'AWS::StackName']]
+  #     RetentionInDays: 14
+  # taskdefinition:
+  #   Type: AWS::ECS::TaskDefinition
+  #   Properties:
+  #     ContainerDefinitions:
+  #       - Name: windows_sample_app
+  #         Cpu: '100'
+  #         Essential: 'true'
+  #         Image: microsoft/iis
+  #         Memory: '500'
+  #         EntryPoint:
+  #           - powershell
+  #           - -Command
+  #         Command:
+  #           - 'New-Item -Path C:\inetpub\wwwroot\index.html -Type file -Value ''<html>
+  #             <head> <title>Amazon ECS Sample App</title> <style>body {margin-top:
+  #             40px; background-color: #333;} </style> </head><body> <div style=color:white;text-align:center>
+  #             <h1>Amazon ECS Sample App</h1> <h2>Congratulations!</h2> <p>Your application
+  #             is now running on a container in Amazon ECS.</p>''; C:\ServiceMonitor.exe
+  #             w3svc'
+  #         LogConfiguration:
+  #           LogDriver: awslogs
+  #           Options:
+  #             awslogs-group: !Ref 'CloudwatchLogsGroup'
+  #             awslogs-region: !Ref 'AWS::Region'
+  #             awslogs-stream-prefix: ecs-windows-sample-app
+  #         PortMappings:
+  #           - ContainerPort: 80
+  ProxyELB:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      LoadBalancerName: !Sub "ProxyELB-${AWS::StackName}"
+      Scheme: internal
+      # LoadBalancerAttributes:
+      #   - Key: idle_timeout.timeout_seconds
+      #     Value: '30'
+      Subnets: !Ref 'SubnetIDs'
+      CrossZone: 'true'
+      SecurityGroups:
+        - !Ref 'ProxySecurityGroup'
+      Listeners: 
+        - 
+          InstancePort: !Ref ProxyListenPort
+          InstanceProtocol: TCP
+          LoadBalancerPort: !Ref ProxyListenPort
+          Protocol: TCP
+      HealthCheck:
+        HealthyThreshold: 2
+        UnhealthyThreshold: 2
+        Interval: 10
+        Timeout: 9
+        Target: !Sub "TCP:${ProxyListenPort}"
+
+  # ProxyEIP:
+  #   Type: AWS::EC2::EIP
+      
+  # ProxyELBListener:
+  #   Type: AWS::ElasticLoadBalancing::Listener
+  #   # DependsOn: ECSServiceRole
+  #   Properties:
+  #     DefaultActions:
+  #       - Type: forward
+  #         TargetGroupArn: !Ref 'ProxyTargetGroup'
+  #     LoadBalancerArn: !Ref 'ProxyELB'
+  #     Port: !Ref ProxyListenPort
+  #     Protocol: TCP
+  # ProxyELBListenerRule:
+  #   Type: AWS::ElasticLoadBalancingV2::ListenerRule
+  #   DependsOn: ProxyELBListener
+  #   Properties:
+  #     Actions:
+  #       - Type: forward
+  #         TargetGroupArn: !Ref 'ProxyTargetGroup'
+  #     Conditions:
+  #       - Field: path-pattern
+  #         Values:
+  #           - /
+  #     ListenerArn: !Ref 'ProxyELBListener'
+  #     Priority: 1
+  # ProxyTargetGroup:
+  #   Type: AWS::ElasticLoadBalancingV2::TargetGroup
+  #   DependsOn: ProxyELB
+  #   Properties:
+  #     HealthCheckIntervalSeconds: 10
+  #     HealthCheckPath: /
+  #     HealthCheckProtocol: TCP
+  #     HealthCheckTimeoutSeconds: 5
+  #     HealthyThresholdCount: 2
+  #     Name: ProxyTargetGroup
+  #     Port: !Ref ProxyListenPort
+  #     Protocol: TCP
+  #     UnhealthyThresholdCount: 2
+  #     VpcId: !Ref 'VpcId'
+
+
+  ProxyAutoScalingGroup:
+    # DependsOn: ProxyEIP
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref 'SubnetIDs'
+      LaunchConfigurationName: !Ref 'LaunchConfiguration'
+      MinSize: '1'
+      MaxSize: !Ref 'MaxSize'
+      DesiredCapacity: !Ref 'DesiredCapacity'
+      HealthCheckGracePeriod: 300
+      # TargetGroupARNs:
+      #   - !Ref ProxyTargetGroup
+      LoadBalancerNames:
+        - !Ref ProxyELB
+      Tags:
+        - 
+          Key: Name
+          Value: !Sub
+            - "kops-proxy-${StackName}"
+            - StackName: !Ref AWS::StackName
+          PropagateAtLaunch: true
+        - 
+          Key: KopsProxy
+          Value: 'true'          
+          PropagateAtLaunch: true
+        # - 
+        #   Key: ECS_CLUSTER
+        #   Value: !Sub ${AWS::StackName}-ecs-cluster
+        #   PropagateAtLaunch: true
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinInstancesInService: '0'
+        MaxBatchSize: '1'
+        PauseTime: PT15M
+        WaitOnResourceSignals: 'true'
+
+  LaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !FindInMap [AWSRegionToAMI, !Ref 'AWS::Region', AMIID]
+      SecurityGroups:
+        - !Ref 'ProxySecurityGroup'
+      InstanceType: !Ref 'InstanceType'
+      IamInstanceProfile: !Ref 'EC2InstanceProfile'
+      KeyName: !Ref 'KeyName'
+      # BlockDeviceMappings:
+      #   - DeviceName: /dev/sda1
+      #     Ebs:
+      #       VolumeSize: '100'
+      #       VolumeType: gp2
+      AssociatePublicIpAddress: 'true'
+      UserData: 
+        "Fn::Base64": 
+          !Sub |
+            #!/bin/bash
+            instanceId=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+            # aws --region cn-north-1 ec2 associate-address --allow-reassociation  --allocation-id AllocationId --instance-id $instanceId
+            yum update -y
+            yum install -y aws-cfn-bootstrap docker
+            cat << EOF > /etc/docker/daemon.json
+            {
+              "registry-mirrors": ["${DockerRegistryMirror}"]
+            }
+
+            EOF
+            service docker start
+            # # /opt/aws/bin/cfn-init -v -s ${AWS::StackId} -r ASGLC --region ${AWS::Region}
+            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource ProxyAutoScalingGroup --region ${AWS::Region} 
+            docker run -d -p 8888:8888 ginuerzh/gost -D -L=http://:8888 -F=${RemoteGostServiceEndpoint}
+
+  # service:
+  #   Type: AWS::ECS::Service
+  #   DependsOn: ELBListener
+  #   Properties:
+  #     Cluster: !Ref 'ECSCluster'
+  #     DesiredCount: '1'
+  #     LoadBalancers:
+  #       - ContainerName: windows_sample_app
+  #         ContainerPort: '80'
+  #         TargetGroupArn: !Ref 'ECSTargetGroup'
+  #     Role: !Ref 'ECSServiceRole'
+  #     TaskDefinition: !Ref 'taskdefinition'
+  # ECSServiceRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service:
+  #               - ecs.amazonaws.com
+  #           Action:
+  #             - sts:AssumeRole
+  #     Path: /
+  #     Policies:
+  #       - PolicyName: ecs-service
+  #         PolicyDocument:
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - elasticloadbalancing:DeregisterInstancesFromLoadBalancer
+  #                 - elasticloadbalancing:DeregisterTargets
+  #                 - elasticloadbalancing:Describe*
+  #                 - elasticloadbalancing:RegisterInstancesWithLoadBalancer
+  #                 - elasticloadbalancing:RegisterTargets
+  #                 - ec2:Describe*
+  #                 - ec2:AuthorizeSecurityGroupIngress
+  #               Resource: '*'
+  # ServiceScalingTarget:
+  #   Type: AWS::ApplicationAutoScaling::ScalableTarget
+  #   DependsOn: service
+  #   Properties:
+  #     MaxCapacity: 2
+  #     MinCapacity: 1
+  #     ResourceId: !Join ['', [service/, !Ref 'ECSCluster', /, !GetAtt 'service.Name']]
+  #     RoleARN: !GetAtt 'AutoscalingRole.Arn'
+  #     ScalableDimension: ecs:service:DesiredCount
+  #     ServiceNamespace: ecs
+  # ServiceScalingPolicy:
+  #   Type: AWS::ApplicationAutoScaling::ScalingPolicy
+  #   Properties:
+  #     PolicyName: AStepPolicy
+  #     PolicyType: StepScaling
+  #     ScalingTargetId: !Ref 'ServiceScalingTarget'
+  #     StepScalingPolicyConfiguration:
+  #       AdjustmentType: PercentChangeInCapacity
+  #       Cooldown: 60
+  #       MetricAggregationType: Average
+  #       StepAdjustments:
+  #         - MetricIntervalLowerBound: 0
+  #           ScalingAdjustment: 200
+  # ELB500sAlarmScaleUp:
+  #   Type: AWS::CloudWatch::Alarm
+  #   Properties:
+  #     EvaluationPeriods: '1'
+  #     Statistic: Average
+  #     Threshold: '10'
+  #     AlarmDescription: Alarm if our ELB generates too many HTTP 500s.
+  #     Period: '60'
+  #     AlarmActions:
+  #       - !Ref 'ServiceScalingPolicy'
+  #     Namespace: AWS/ApplicationELB
+  #     Dimensions:
+  #       - Name: ECSService
+  #         Value: !Ref 'service'
+  #     ComparisonOperator: GreaterThanThreshold
+  #     MetricName: HTTPCode_ELB_5XX_Count
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com.cn
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: ec2-associate-addr
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:AssociateAddress
+                Resource: '*'
+  # AutoscalingRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service:
+  #               - application-autoscaling.amazonaws.com.cn
+  #           Action:
+  #             - sts:AssumeRole
+  #     Path: /
+  #     Policies:
+  #       - PolicyName: service-autoscaling
+  #         PolicyDocument:
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - application-autoscaling:*
+  #                 - cloudwatch:DescribeAlarms
+  #                 - cloudwatch:PutMetricAlarm
+  #                 - ecs:DescribeServices
+  #                 - ecs:UpdateService
+  #               Resource: '*'
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref 'EC2Role'
+
+
+  # ECSDefaultCluster:
+  #   Type: "AWS::ECS::Cluster"
+  #   Properties:
+  #     ClusterName: !Sub ${AWS::StackName}-ecs-cluster
+
+Outputs:
+  HttpProxyHost:
+    Value: !Sub "${ProxyELB.DNSName}"
+  HttpProxyPort:
+    Value: !Sub "${ProxyListenPort}"  
+  # ProxyEIP:
+  #   Value: !Ref ProxyEIP
+  # ecsservice:
+  #   Value: !Ref 'service'
+  # ecscluster:
+  #   Value: !Ref 'ECSCluster'
+  # ECSELB:
+  #   Description: Your ELB DNS URL
+  #   Value: !Join ['', [!GetAtt 'ECSELB.DNSName']]
+  # taskdef:
+  #   Value: !Ref 'taskdefinition'
