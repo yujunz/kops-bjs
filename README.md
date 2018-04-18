@@ -95,9 +95,55 @@ execute the script to create the cluster:
 $ bash create_cluster.sh 
 ```
 
+After a few minutes, you can validate the cluster like this:
+
+```
+$ kops validate cluster
+Using cluster from kubectl context: cluster.k8s.local
+
+Validating cluster cluster.k8s.local
+
+INSTANCE GROUPS
+NAME			ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-cn-north-1a-1	Master	m3.medium	1	1	cn-north-1a
+master-cn-north-1a-2	Master	m3.medium	1	1	cn-north-1a
+master-cn-north-1b-1	Master	m3.medium	1	1	cn-north-1b
+nodes			Node	m3.medium	2	2	cn-north-1a,cn-north-1b
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-31-41-211.cn-north-1.compute.internal	master	True
+ip-172-31-43-233.cn-north-1.compute.internal	master	True
+ip-172-31-62-125.cn-north-1.compute.internal	node	True
+ip-172-31-73-124.cn-north-1.compute.internal	master	True
+ip-172-31-85-213.cn-north-1.compute.internal	node	True
+
+Your cluster cluster.k8s.local is ready
+```
+
+Or get nodes list like this
+
+```
+$ kubectl get nodes
+NAME                                           STATUS    ROLES     AGE       VERSION
+ip-172-31-41-211.cn-north-1.compute.internal   Ready     master    6m        v1.9.3
+ip-172-31-43-233.cn-north-1.compute.internal   Ready     master    5m        v1.9.3
+ip-172-31-62-125.cn-north-1.compute.internal   Ready     node      5m        v1.9.3
+ip-172-31-73-124.cn-north-1.compute.internal   Ready     master    6m        v1.9.3
+ip-172-31-85-213.cn-north-1.compute.internal   Ready     node      5m        v1.9.3
+```
 
 
 
+### clean up
+
+delete the cluster
+
+```
+$ kops delete cluster --name cluster.k8s.local --yes
+```
+
+And delete the two cloudformation stacks from N.Virginia and Beijing regions.
 
 
 
