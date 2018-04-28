@@ -95,6 +95,29 @@ execute the script to create the cluster:
 $ bash create_cluster.sh 
 ```
 
+edit your cluster and paste the http proxy info in the `spec` section
+
+```
+spec:
+  egressProxy:
+    httpProxy:
+      host: <host>
+      port: <port>
+    excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com
+```
+
+(you should be able to see your httpproxy host and port info in the output of the cloudformation in Beijing Region)
+
+
+
+update the cluster with `—yes`
+
+```
+kops update cluster --name cluster.k8s.local --yes
+```
+
+
+
 After a few minutes, you can validate the cluster like this:
 
 ```
