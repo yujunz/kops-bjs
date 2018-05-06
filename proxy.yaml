@@ -1,4 +1,8 @@
 spec:
+  docker:
+    logDriver: ""
+    registryMirrors:
+        - https://<host>
   egressProxy:
     httpProxy:
       host: <host>
