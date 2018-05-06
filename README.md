@@ -95,10 +95,14 @@ execute the script to create the cluster:
 $ bash create_cluster.sh 
 ```
 
-edit your cluster and paste the http proxy info in the `spec` section
+edit your cluster and paste the docker `registryMirrors` and `httpProxy` info in the `spec` section
 
 ```
 spec:
+  docker:
+    logDriver: ""
+    registryMirrors:
+        - https://<host>
   egressProxy:
     httpProxy:
       host: <host>
