@@ -2,7 +2,7 @@ spec:
   docker:
     logDriver: ""
     registryMirrors:
-        - https://<host>
+        - https://registry.docker-cn.com
   egressProxy:
     httpProxy:
       host: <host>
