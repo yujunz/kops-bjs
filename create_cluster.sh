@@ -11,8 +11,8 @@
 
 source env.config
 
-cluster_name='cluster.k8s.local'
-ami='ami-f036e99d'
+cluster_name='cluster.bjs.k8s.local'
+ami='ami-39ee3154'
 vpcid='vpc-c1e040a5'
 
 kops create cluster \
@@ -25,7 +25,3 @@ kops create cluster \
      --node-size="m3.medium"  \
      --vpc=${vpcid} \
      --ssh-public-key="~/.ssh/id_rsa.pub"
-     
-#--subnets=subnet-9311f8f7,subnet-f3610a84 \
-     #--networking=calico \
-

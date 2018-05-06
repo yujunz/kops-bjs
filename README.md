@@ -31,7 +31,9 @@ ami-9e2685e3
 
 Then follow [this comment](https://github.com/kubernetes-incubator/kube-aws/pull/390#issue-212435055) to copy the AMI from us-west-1 to China Beijing region.
 
-Or just use my AMI in Beijing region: **ami-f036e99d** (CoreOS-stable-1688.5.3-hvm) 
+###### Recommended Approach
+
+However, as the China Beijing region already has latest CoreOS AMI, you can just check [CoreOS official EC2 AMI page](https://coreos.com/os/docs/latest/booting-on-ec2.html) and select the AMI for `cn-north-1` region, make sure you select the `HVM` AMI type. For example, current AMI ID is **ami-39ee3154** ([CoreOS 1688.5.3](https://coreos.com/os/docs/1688.5.3/index.html)). Please note the latest AMI ID may change over time.
 
 
 
@@ -59,8 +61,8 @@ click the button below to create an internal http_proxy forwarder for your Kops 
 update `create_cluster.sh` and modify the variables:
 
 ```
-cluster_name='cluster.k8s.local'
-ami='ami-f036e99d'
+cluster_name='cluster.bjs2.k8s.local'
+ami='ami-39ee3154'
 vpcid='vpc-c1e040a5'  
 ```
 
@@ -102,7 +104,7 @@ spec:
   docker:
     logDriver: ""
     registryMirrors:
-        - https://<host>
+        - https://registry.docker-cn.com
   egressProxy:
     httpProxy:
       host: <host>
@@ -117,7 +119,7 @@ spec:
 update the cluster with `—yes`
 
 ```
-kops update cluster --name cluster.k8s.local --yes
+kops update cluster --name cluster.bjs2.k8s.local --yes
 ```
 
 
@@ -126,9 +128,9 @@ After a few minutes, you can validate the cluster like this:
 
 ```
 $ kops validate cluster
-Using cluster from kubectl context: cluster.k8s.local
+Using cluster from kubectl context: cluster.bjs2.k8s.local
 
-Validating cluster cluster.k8s.local
+Validating cluster cluster.bjs2.k8s.local
 
 INSTANCE GROUPS
 NAME			ROLE	MACHINETYPE	MIN	MAX	SUBNETS
@@ -139,13 +141,13 @@ nodes			Node	m3.medium	2	2	cn-north-1a,cn-north-1b
 
 NODE STATUS
 NAME						ROLE	READY
-ip-172-31-41-211.cn-north-1.compute.internal	master	True
-ip-172-31-43-233.cn-north-1.compute.internal	master	True
-ip-172-31-62-125.cn-north-1.compute.internal	node	True
-ip-172-31-73-124.cn-north-1.compute.internal	master	True
-ip-172-31-85-213.cn-north-1.compute.internal	node	True
+ip-172-31-37-81.cn-north-1.compute.internal	node	True
+ip-172-31-39-42.cn-north-1.compute.internal	master	True
+ip-172-31-51-46.cn-north-1.compute.internal	master	True
+ip-172-31-68-190.cn-north-1.compute.internal master	True
+ip-172-31-68-61.cn-north-1.compute.internal	node	True
 
-Your cluster cluster.k8s.local is ready
+Your cluster cluster.bjs2.k8s.local is ready
 ```
 
 Or get nodes list like this
@@ -153,11 +155,11 @@ Or get nodes list like this
 ```
 $ kubectl get nodes
 NAME                                           STATUS    ROLES     AGE       VERSION
-ip-172-31-41-211.cn-north-1.compute.internal   Ready     master    6m        v1.9.3
-ip-172-31-43-233.cn-north-1.compute.internal   Ready     master    5m        v1.9.3
-ip-172-31-62-125.cn-north-1.compute.internal   Ready     node      5m        v1.9.3
-ip-172-31-73-124.cn-north-1.compute.internal   Ready     master    6m        v1.9.3
-ip-172-31-85-213.cn-north-1.compute.internal   Ready     node      5m        v1.9.3
+ip-172-31-37-81.cn-north-1.compute.internal    Ready     node      15m       v1.9.3
+ip-172-31-39-42.cn-north-1.compute.internal    Ready     master    17m       v1.9.3
+ip-172-31-51-46.cn-north-1.compute.internal    Ready     master    16m       v1.9.3
+ip-172-31-68-190.cn-north-1.compute.internal   Ready     master    16m       v1.9.3
+ip-172-31-68-61.cn-north-1.compute.internal    Ready     node      15m       v1.9.3
 ```
 
 
@@ -167,7 +169,7 @@ ip-172-31-85-213.cn-north-1.compute.internal   Ready     node      5m        v1.
 delete the cluster
 
 ```
-$ kops delete cluster --name cluster.k8s.local --yes
+$ kops delete cluster --name cluster.bjs2.k8s.local --yes
 ```
 
 And delete the two cloudformation stacks from N.Virginia and Beijing regions.
