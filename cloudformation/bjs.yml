@@ -20,8 +20,8 @@ Parameters:
     Description: The port proxy is listening  
   DockerRegistryMirror:
     Type: String
-    Default: 'https://i1repedl.mirror.aliyuncs.com'
-    Description: docker registry mirror(if applicable) 
+    Default: 'https://registry.docker-cn.com'
+    Description: docker registry mirror(https://www.docker-cn.com/registry-mirror) 
   RemoteGostServiceEndpoint:
     Type: String
     Description: remote gost service endpoint string
