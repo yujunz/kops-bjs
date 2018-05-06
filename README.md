@@ -172,7 +172,7 @@ delete the cluster
 $ kops delete cluster --name cluster.bjs2.k8s.local --yes
 ```
 
-And delete the two cloudformation stacks from N.Virginia and Beijing regions.
+And delete the two cloudformation stacks from `N.Virginia` and `Beijing` regions.
 
 
 
