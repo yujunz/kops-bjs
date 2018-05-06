@@ -66,7 +66,7 @@ ami='ami-39ee3154'
 vpcid='vpc-c1e040a5'  
 ```
 
-**cluster_name** : specify your cluster name, you can leave it as default.
+**cluster_name** : specify your cluster name.  You can leave it as default.  Make sure the `cluster_name` ends with `.k8s.local` so it will create gossip-based cluster without using Route53, which is not available in China Beijing region.
 
 **ami** : The AMI ID you just created and register in Beijing Region.
 
