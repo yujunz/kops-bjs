@@ -61,7 +61,7 @@ click the button below to create an internal http_proxy forwarder for your Kops 
 update `create_cluster.sh` and modify the variables:
 
 ```bash
-cluster_name='cluster.bjs2.k8s.local'
+cluster_name='cluster.bjs.k8s.local'
 ami='ami-39ee3154'
 vpcid='vpc-c1e040a5'  
 ```
@@ -119,7 +119,7 @@ spec:
 update the cluster with `—yes`
 
 ```bash
-kops update cluster --name cluster.bjs2.k8s.local --yes
+kops update cluster --name cluster.bjs.k8s.local --yes
 ```
 
 
@@ -128,9 +128,9 @@ After a few minutes(typically 8-15min), you can validate the cluster like this:
 
 ```
 $ kops validate cluster
-Using cluster from kubectl context: cluster.bjs2.k8s.local
+Using cluster from kubectl context: cluster.bjs.k8s.local
 
-Validating cluster cluster.bjs2.k8s.local
+Validating cluster cluster.bjs.k8s.local
 
 INSTANCE GROUPS
 NAME			ROLE	MACHINETYPE	MIN	MAX	SUBNETS
@@ -147,7 +147,7 @@ ip-172-31-51-46.cn-north-1.compute.internal	master	True
 ip-172-31-68-190.cn-north-1.compute.internal master	True
 ip-172-31-68-61.cn-north-1.compute.internal	node	True
 
-Your cluster cluster.bjs2.k8s.local is ready
+Your cluster cluster.bjs.k8s.local is ready
 ```
 
 Or get nodes list like this
@@ -169,7 +169,7 @@ ip-172-31-68-61.cn-north-1.compute.internal    Ready     node      15m       v1.
 delete the cluster
 
 ```
-$ kops delete cluster --name cluster.bjs2.k8s.local --yes
+$ kops delete cluster --name cluster.bjs.k8s.local --yes
 ```
 
 And delete the two cloudformation stacks from `N.Virginia` and `Beijing` regions.
