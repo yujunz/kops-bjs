@@ -31,7 +31,7 @@ ami-9e2685e3
 
 Then follow [this comment](https://github.com/kubernetes-incubator/kube-aws/pull/390#issue-212435055) to copy the AMI from us-west-1 to China Beijing region.
 
-###### Recommended Approach
+#### Recommended Approach
 
 However, as the China Beijing region already has latest CoreOS AMI, you can just check [CoreOS official EC2 AMI page](https://coreos.com/os/docs/latest/booting-on-ec2.html) and select the AMI for `cn-north-1` region, make sure you select the `HVM` AMI type. For example, current AMI ID is **ami-39ee3154** ([CoreOS 1688.5.3](https://coreos.com/os/docs/1688.5.3/index.html)). Please note the latest AMI ID may change over time.
 
@@ -60,7 +60,7 @@ click the button below to create an internal http_proxy forwarder for your Kops 
 
 update `create_cluster.sh` and modify the variables:
 
-```
+```bash
 cluster_name='cluster.bjs2.k8s.local'
 ami='ami-39ee3154'
 vpcid='vpc-c1e040a5'  
@@ -76,7 +76,7 @@ vpcid='vpc-c1e040a5'
 
 update `env.config`
 
-```
+```bash
 export AWS_PROFILE='bjs'
 export AWS_DEFAULT_REGION='cn-north-1'
 export AWS_REGION=${AWS_DEFAULT_REGION}
@@ -93,13 +93,13 @@ export KOPS_STATE_STORE=s3://pahud-kops-state-store
 
 execute the script to create the cluster:
 
-```
+```bash
 $ bash create_cluster.sh 
 ```
 
 edit your cluster and paste the docker `registryMirrors` and `httpProxy` info in the `spec` section
 
-```
+```yaml
 spec:
   docker:
     logDriver: ""
@@ -108,8 +108,8 @@ spec:
   egressProxy:
     httpProxy:
       host: <host>
-      port: <port>
-    excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com
+      port: 8888
+    excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com,registry.docker-cn.com
 ```
 
 (you should be able to see your httpproxy host and port info in the output of the cloudformation in Beijing Region)
@@ -118,13 +118,13 @@ spec:
 
 update the cluster with `—yes`
 
-```
+```bash
 kops update cluster --name cluster.bjs2.k8s.local --yes
 ```
 
 
 
-After a few minutes, you can validate the cluster like this:
+After a few minutes(typically 8-15min), you can validate the cluster like this:
 
 ```
 $ kops validate cluster
