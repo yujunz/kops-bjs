@@ -24,7 +24,7 @@ Check the latest AMI ID from [Kops Images](https://github.com/kubernetes/kops/bl
 
 For example, you can find the latest CoreOS AMI in us-esat-1 like this:
 
-```
+```bash
 $ curl -s https://coreos.com/dist/aws/aws-stable.json | jq -r '.["us-east-1"].hvm'
 ami-9e2685e3
 ```
@@ -130,7 +130,7 @@ kops update cluster --name cluster.bjs.k8s.local --yes
 
 After a few minutes(typically 8-15min), you can validate the cluster like this:
 
-```
+```bash
 $ kops validate cluster
 Using cluster from kubectl context: cluster.bjs.k8s.local
 
@@ -156,7 +156,7 @@ Your cluster cluster.bjs.k8s.local is ready
 
 Or get nodes list like this
 
-```
+```bash
 $ kubectl get nodes
 NAME                                           STATUS    ROLES     AGE       VERSION
 ip-172-31-37-81.cn-north-1.compute.internal    Ready     node      15m       v1.9.3
@@ -172,7 +172,7 @@ ip-172-31-68-61.cn-north-1.compute.internal    Ready     node      15m       v1.
 
 delete the cluster
 
-```
+```bash
 $ kops delete cluster --name cluster.bjs.k8s.local --yes
 ```
 
