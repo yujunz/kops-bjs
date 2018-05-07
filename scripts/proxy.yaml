@@ -1,0 +1,28 @@
+spec:
+  hooks:
+  - name: update-engine.service
+    disabled: true
+  etcdClusters:
+    events:
+      image: anjia0532/etcd:2.2.1
+    main:
+      image: anjia0532/etcd:2.2.1
+  masterKubelet:
+    podInfraContainerImage: anjia0532/pause-amd64:3.0
+  kubeControllerManager:
+    image: anjia0532/kube-controller-manager:v1.9.3
+  kubeScheduler:
+    image: anjia0532/kube-scheduler:v1.9.3
+  kubeProxy:
+    image: anjia0532/kube-proxy:v1.9.3
+  kubeAPIServer:
+    image: anjia0532/kube-apiserver:v1.9.3
+  docker:
+    logDriver: ""
+    registryMirrors:
+        - https://registry.docker-cn.com
+  egressProxy:
+    httpProxy:
+      host: <host>
+      port: 8888
+    excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com,registry.docker-cn.com
