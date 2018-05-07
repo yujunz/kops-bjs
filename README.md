@@ -97,7 +97,13 @@ execute the script to create the cluster:
 $ bash create_cluster.sh 
 ```
 
-edit your cluster and paste the docker `registryMirrors` and `httpProxy` info in the `spec` section
+edit your cluster
+
+```bash
+$ kops edit cluster cluster.bjs.k8s.local
+```
+
+paste the content below under the `spec` section for the cluster. Make sure you set correct httpProxy host.
 
 ```yaml
 spec:
@@ -112,9 +118,7 @@ spec:
     excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com,registry.docker-cn.com
 ```
 
-(you should be able to see your httpproxy host and port info in the output of the cloudformation in Beijing Region)
-
-
+(you should be able to see your httpProxy host and port info in the output of the cloudformation in Beijing Region)
 
 update the cluster with `—yes`
 
