@@ -1,4 +1,4 @@
-# Fast Bootstrapping with Local mirror
+# Fast bootstrapping with local mirror
 
 This is an enhancement from this request([#2](https://github.com/pahud/kops-bjs/issues/2)) that leverages all possible local mirror with minimal downloads from other global regions.
 
@@ -104,9 +104,9 @@ The enchancements including:
 
 ## Debug
 
-You may ssh into any master node with `ssh core@xxx.xxx.xxx.xxx` and type `journalctl -f` as root to see the system messages.
+You may ssh into any master node with `ssh core@IP_ADDRSS` and type `journalctl -f` as root to see the system messages.
 
-When all the three master nodes under ELB become healthy, you may access your cluster with `kubectl`.
+When all the three master nodes under ELB become healthy, you may access your cluster with `kubectl`. Typically it would take 8-15 minutes to become all healthy.
 
 
 
