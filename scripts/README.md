@@ -8,7 +8,7 @@ The enchancements including:
 2. some artifacts from google cloud storage can be mirrored to S3 in Beijing region and set `--kubernetes-version` to specify the local S3 mirror path for acceleration
 3. export `CNI_VERSION_URL` env variable and point to Beijing S3 for CNI plug-in download acceleration
 4. use [official CoreOS AMI](https://coreos.com/os/docs/latest/booting-on-ec2.html) from Beijing region - no need to bake the AMI from other region and ship to Beijing region.
-5. plus the `http_proxy` and `https_proxy`  for other requirement
+5. plus the `http_proxy` and `https_proxy`  for other requirement that can't leverage local mirror.
 
 
 
@@ -18,7 +18,7 @@ The enchancements including:
 
 2. update your [proxy.yaml](https://github.com/pahud/kops-bjs/blob/master/scripts/proxy.yaml) and set your http_proxy host correctly
 
-3. update your [create clusgter script](https://github.com/pahud/kops-bjs/blob/master/scripts/create_cluster_localmirror.sh), set your `vpcid` correctly and make sure `--ssh-public-key` points to your local SSH public key path.
+3. update your [create cluster script](https://github.com/pahud/kops-bjs/blob/master/scripts/create_cluster_localmirror.sh), set your `vpcid` correctly and make sure `--ssh-public-key` points to your local SSH public key path.
 
 4. run the create script:
 
