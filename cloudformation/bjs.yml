@@ -367,13 +367,27 @@ Resources:
               - sts:AssumeRole
       Path: /
       Policies:
-        - PolicyName: ec2-associate-addr
+        # - PolicyName: ec2-associate-addr
+        #   PolicyDocument:
+        #     Statement:
+        #       - Effect: Allow
+        #         Action:
+        #           - ec2:AssociateAddress
+        #         Resource: '*'
+        - PolicyName: ssm
           PolicyDocument:
             Statement:
               - Effect: Allow
                 Action:
-                  - ec2:AssociateAddress
+                  - ssm:*
                 Resource: '*'
+        - PolicyName: ec2messages
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2messages:GetMessages
+                Resource: '*'         
   # AutoscalingRole:
   #   Type: AWS::IAM::Role
   #   Properties:
