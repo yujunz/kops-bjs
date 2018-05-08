@@ -42,11 +42,14 @@ However, as the China Beijing region already has latest CoreOS AMI, you can just
 - [install kops](https://github.com/kubernetes/kops/blob/master/docs/aws.md#install-kops)
 - [install kubectl](https://github.com/kubernetes/kops/blob/master/docs/aws.md#install-kubectl)
 
-### Create a proxy server with gost in AWS N. Virginia Region
+### Create a proxy server with gost and AWS Fargate
 
-click the button to create a proxy server with [gost](https://github.com/ginuerzh/gost) on AWS Fargate in us-east-1
+click the button to create a proxy server with [gost](https://github.com/ginuerzh/gost) and AWS Fargate  in any of the following regions.
 
-[![cloudformation-launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=gost-service&templateURL=https://s3-us-west-2.amazonaws.com/pahud-cfn-us-west-2/kops-bjs/cloudformation/ecs-fargate-gost-tls-ss.yaml)
+|           Region            |                     Launch Stack in VPC                      | Runtime |
+| :-------------------------: | :----------------------------------------------------------: | :-----: |
+|   **Oregon** (us-west-2)    | [![cloudformation-launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=gost-service&templateURL=https://s3-us-west-2.amazonaws.com/pahud-cfn-us-west-2/kops-bjs/cloudformation/ecs-fargate-gost-tls-ss.yaml) | Fargate |
+| **N. Virginia** (us-east-1) | [![cloudformation-launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=gost-service&templateURL=https://s3-us-west-2.amazonaws.com/pahud-cfn-us-west-2/kops-bjs/cloudformation/ecs-fargate-gost-tls-ss.yaml) | Fargate |
 
 
 
