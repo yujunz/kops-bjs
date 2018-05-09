@@ -80,6 +80,9 @@ Mappings:
   AWSRegionToAMI:
     cn-north-1:
       AMIID: ami-d8578bb5
+    cn-northwest-1:
+      AMIID: ami-02f5e160
+Resources:
 Resources:
   ProxySecurityGroup:
     Type: AWS::EC2::SecurityGroup
