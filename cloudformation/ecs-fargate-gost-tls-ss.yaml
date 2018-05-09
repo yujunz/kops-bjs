@@ -101,6 +101,10 @@ Parameters:
     Type: String
     Default: ChangeMe
     Description: Shadowsocks password, you must change the default one.
+    MinLength : 3
+    MaxLength : 16
+    AllowedPattern : "^[a-zA-Z0-9]*$"
+
   # SecurityGroupCidr:
   #   Type: String
   #   Description: Cidr range for the ingress to the service(You should change this value set the public IP of the gost client)
