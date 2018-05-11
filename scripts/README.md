@@ -14,13 +14,15 @@ The enchancements including:
 
 ## Usage
 
-1. update your [env.config](https://github.com/pahud/kops-bjs/blob/master/scripts/env.config)
+1. follow the [README](https://github.com/pahud/kops-bjs/blob/master/README.md) to build the http_proxy tunnel between NinXia and US. You will need to create two cloudformation stacks - one in U.S. and the other in Beijing.
+
+2. update your [env.config](https://github.com/pahud/kops-bjs/blob/master/scripts/env.config)
 
 2. update your [proxy.yaml](https://github.com/pahud/kops-bjs/blob/master/scripts/proxy.yaml) and set your http_proxy host correctly
 
 3. update your [create cluster script](https://github.com/pahud/kops-bjs/blob/master/scripts/create_cluster_localmirror.sh), set your `vpcid` correctly and make sure `--ssh-public-key` points to your local SSH public key path.
 
-4. run the create script:
+5. run the create script:
 
    ```bash
    $ bash create_cluster_localmirror.sh
@@ -29,21 +31,16 @@ The enchancements including:
    You will see message like this, please ignore it, as we are using an alternative `--kubernetes-version` specified in the `kops create cluster` and kops will consider this as an older version.
 
    ```
-
-   ```
-
-
-*********************************************************************************
-
    A new kubernetes version is available: 1.9.3
-   Upgrading is recommended (try kops upgrade cluster)
 
-   More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgrade_k8s.md#1.9.3
+      Upgrading is recommended (try kops upgrade cluster)
 
-*********************************************************************************
+      More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgrade_k8s.md#1.9.3
+
    ```
 
-   ​
+
+
 
 5. edit your cluster
 
