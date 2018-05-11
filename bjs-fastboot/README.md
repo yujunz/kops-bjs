@@ -16,11 +16,11 @@ The enchancements including:
 
 1. follow the [README](https://github.com/pahud/kops-bjs/blob/master/README.md) to build the http_proxy tunnel between NinXia and US. You will need to create two cloudformation stacks - one in U.S. and the other in Beijing.
 
-2. update your [env.config](https://github.com/pahud/kops-bjs/blob/master/scripts/env.config)
+2. update your [env.config](https://github.com/pahud/kops-bjs/blob/master/bjs-fastboot/env.config)
 
-2. update your [proxy.yaml](https://github.com/pahud/kops-bjs/blob/master/scripts/proxy.yaml) and set your http_proxy host correctly
+2. update your [proxy.yaml](https://github.com/pahud/kops-bjs/blob/master/bjs-fastboot/proxy.yaml) and set your http_proxy host correctly
 
-3. update your [create cluster script](https://github.com/pahud/kops-bjs/blob/master/scripts/create_cluster_localmirror.sh), set your `vpcid` correctly and make sure `--ssh-public-key` points to your local SSH public key path.
+3. update your [create cluster script](https://github.com/pahud/kops-bjs/blob/master/bjs-fastboot/create_cluster_localmirror.sh), set your `vpcid` correctly and make sure `--ssh-public-key` points to your local SSH public key path.
 
 5. run the create script:
 

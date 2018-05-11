@@ -120,7 +120,7 @@ When all the three master nodes under `ELB` become healthy, you may access your 
 
 ## Beijing Region a.k.a. BJS Support(cn-north-1)
 
-Yes, this script also supports AWS Beijing Region with 2 AZs. Please check the [sample scripts](https://github.com/pahud/kops-bjs/tree/master/scripts).
+Yes, this script also supports AWS Beijing Region with 2 AZs. Please check the [sample scripts](https://github.com/pahud/kops-bjs/tree/master/bjs-fastboot).
 
 
 

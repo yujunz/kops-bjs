@@ -200,7 +200,7 @@ The approach provided above will not leverage any local mirror of artifacts. If 
 
 |           Region           |                            Guide                             |
 | :------------------------: | :----------------------------------------------------------: |
-|  **Beijing**(cn-north-1)   | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/scripts) |
+|  **Beijing**(cn-north-1)   | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/bjs-fastboot) |
 | **NinXia**(cn-northwest-1) | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/zhy-fastboot) |
 
 
