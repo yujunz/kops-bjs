@@ -196,7 +196,14 @@ And delete the two cloudformation stacks from `N.Virginia` and `Beijing` regions
 
 ## Fast Bootstrapping with local mirror
 
-The approach provided above will not leverage any local mirror of artifacts. If you are interested to leverage local artifacts mirror including the `gcr.io` docker hub mirror to accelerate the boostrapping, please check [this guide](https://github.com/pahud/kops-bjs/tree/master/scripts).
+The approach provided above will not leverage any local mirror of artifacts. If you are interested to leverage local artifacts mirror including the `gcr.io` docker hub mirror to accelerate the boostrapping, please check this table:
+
+|           Region           |                            Guide                             |
+| :------------------------: | :----------------------------------------------------------: |
+|  **Beijing**(cn-north-1)   | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/scripts) |
+| **NinXia**(cn-northwest-1) | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/zhy-fastboot) |
+
+
 
 
 
