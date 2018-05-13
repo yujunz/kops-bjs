@@ -207,9 +207,9 @@ The approach provided above will not leverage any local mirror of artifacts. If 
 
 
 
+## FAQ
 
-
-
+Questions? check the [FAQ list here](https://github.com/pahud/kops-bjs/issues?utf8=%E2%9C%93&q=label%3AFAQ+).
 
 
 
