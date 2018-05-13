@@ -3,10 +3,24 @@ spec:
   - name: update-engine.service
     disabled: true
   etcdClusters:
-    events:
-      image: anjia0532/etcd:2.2.1
-    main:
-      image: anjia0532/etcd:2.2.1
+  - etcdMembers:
+    - instanceGroup: master-cn-northwest-1a
+      name: a
+    - instanceGroup: master-cn-northwest-1b
+      name: b
+    - instanceGroup: master-cn-northwest-1c
+      name: c
+    image: anjia0532/etcd:2.2.1
+    name: main
+  - etcdMembers:
+    - instanceGroup: master-cn-northwest-1a
+      name: a
+    - instanceGroup: master-cn-northwest-1b
+      name: b
+    - instanceGroup: master-cn-northwest-1c
+      name: c
+    image: anjia0532/etcd:2.2.1
+    name: events
   masterKubelet:
     podInfraContainerImage: anjia0532/pause-amd64:3.0
   kubeControllerManager:
