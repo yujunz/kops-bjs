@@ -3,21 +3,21 @@ spec:
     disabled: true
   etcdClusters:
   - etcdMembers:
-    - instanceGroup: master-cn-northwest-1a
-      name: a
-    - instanceGroup: master-cn-northwest-1b
-      name: b
-    - instanceGroup: master-cn-northwest-1c
-      name: c
+    - instanceGroup: master-cn-north-1a
+      name: a1
+    - instanceGroup: master-cn-north-1b
+      name: b1
+    - instanceGroup: master-cn-north-1a
+      name: a2
     image: anjia0532/etcd:2.2.1
     name: main
   - etcdMembers:
-    - instanceGroup: master-cn-northwest-1a
-      name: a
-    - instanceGroup: master-cn-northwest-1b
-      name: b
-    - instanceGroup: master-cn-northwest-1c
-      name: c
+    - instanceGroup: master-cn-north-1a
+      name: a1
+    - instanceGroup: master-cn-north-1b
+      name: b1
+    - instanceGroup: master-cn-north-1a
+      name: a2
     image: anjia0532/etcd:2.2.1
     name: events
   masterKubelet:
