@@ -1,4 +1,5 @@
 spec:
+  hooks:
   - name: update-engine.service
     disabled: true
   etcdClusters:
