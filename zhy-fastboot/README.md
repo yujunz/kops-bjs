@@ -44,51 +44,65 @@ All scripts for Kops fast bootstrapping in NinXia(cn-northwest-1) region.
    For example:
 
 ```
-   # Please edit the object below. Lines beginning with a '#' will be ignored,
-   # and an empty file will abort the edit. If an error occurs while saving this file will be
-   # reopened with the relevant failures.
-   #
-   apiVersion: kops/v1alpha2
-   kind: Cluster
-   metadata:
-     creationTimestamp: 2018-05-07T12:26:21Z
-     name: cluster.zhy.k8s.local
-   spec:
-     hooks:
-     - name: update-engine.service
-       disabled: true
-     etcdClusters:
-       events:
-         image: anjia0532/etcd:2.2.1
-       main:
-         image: anjia0532/etcd:2.2.1
-     masterKubelet:
-       podInfraContainerImage: anjia0532/pause-amd64:3.0
-     kubeControllerManager:
-       image: anjia0532/kube-controller-manager:v1.9.3
-     kubeScheduler:
-       image: anjia0532/kube-scheduler:v1.9.3
-     kubeProxy:
-       image: anjia0532/kube-proxy:v1.9.3
-     kubeAPIServer:
-       image: anjia0532/kube-apiserver:v1.9.3
-     docker:
-       logDriver: ""
-       registryMirrors:
-           - https://registry.docker-cn.com
-     egressProxy:
-       httpProxy:
-         host: <your_http_proxy_host>
-         port: 8888
-       excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com,registry.docker-cn.com
-   [...]
+spec:
+  hooks:
+  - name: update-engine.service
+    disabled: true
+  etcdClusters:
+  - etcdMembers:
+    - instanceGroup: master-cn-northwest-1a
+      name: a
+    - instanceGroup: master-cn-northwest-1b
+      name: b
+    - instanceGroup: master-cn-northwest-1c
+      name: c
+    image: anjia0532/etcd:2.2.1
+    name: main
+  - etcdMembers:
+    - instanceGroup: master-cn-northwest-1a
+      name: a
+    - instanceGroup: master-cn-northwest-1b
+      name: b
+    - instanceGroup: master-cn-northwest-1c
+      name: c
+    image: anjia0532/etcd:2.2.1
+    name: events
+  masterKubelet:
+    podInfraContainerImage: anjia0532/pause-amd64:3.0
+  kubeControllerManager:
+    image: anjia0532/kube-controller-manager:v1.9.3
+  kubeScheduler:
+    image: anjia0532/kube-scheduler:v1.9.3
+  kubeProxy:
+    image: anjia0532/kube-proxy:v1.9.3
+  kubeAPIServer:
+    image: anjia0532/kube-apiserver:v1.9.3
+  docker:
+    logDriver: ""
+    registryMirrors:
+        - https://registry.docker-cn.com
+  egressProxy:
+    httpProxy:
+      host: <host>
+      port: 8888
+    excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com,registry.docker-cn.com
 ```
+
+(please note - replace the default **etcdClusters** privided  with your customer spec so Kops will bootstrap the etcd with your customized Docker image **anjia0532/etcd:2.2.1**, otherwise it will try pulling the image from gcr.io and this could take a long time. )
 
 1. Finally, update your cluster with `—yes`
 
-   ```
-   $ kops update cluster cluster.zhy.k8s.local --yes
-   ```
+```
+$ kops update cluster cluster.zhy.k8s.local --yes
+```
+
+Check the live walkthrough:
+
+[![asciicast](https://asciinema.org/a/byqmH7x8tur7MP91gdqrrHsTf.png)](https://asciinema.org/a/byqmH7x8tur7MP91gdqrrHsTf)
+
+
+
+
 
 ## Debug
 
