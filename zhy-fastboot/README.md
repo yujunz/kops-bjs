@@ -88,7 +88,7 @@ spec:
     excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com,registry.docker-cn.com
 ```
 
-(please note - replace the default **etcdClusters** privided  with your customer spec so Kops will bootstrap the etcd with your customized Docker image **anjia0532/etcd:2.2.1**, otherwise it will try pulling the image from gcr.io and this could take a long time. )
+(please note - replace the default **etcdClusters** privided  with your customized spec so Kops will bootstrap the etcd with your customized Docker image **anjia0532/etcd:2.2.1**, otherwise it will try pulling the image from `gcr.io` and this could take a long time. )
 
 1. Finally, update your cluster with `—yes`
 
