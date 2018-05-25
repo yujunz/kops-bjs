@@ -1,6 +1,6 @@
 # Kops-BJS
 
-This tutorial will walk you through building a Kubernetes cluster with [Kops](https://github.com/kubernetes/kops) in AWS Beijing Region.
+This tutorial will walk you through building a Kubernetes cluster with [Kops](https://github.com/kubernetes/kops) in AWS Beijing or NinXia Region.
 
 
 
