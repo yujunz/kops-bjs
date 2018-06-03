@@ -2,7 +2,9 @@
 
 This tutorial will walk you through building a Kubernetes cluster with [Kops](https://github.com/kubernetes/kops) in AWS Beijing or NinXia Region.
 
-
+|        Name        |                     Support Kops Version                     | Support Kubernetes Version | Last Update  |
+| :----------------: | :----------------------------------------------------------: | :------------------------: | ------------ |
+| **pahud/kops-bjs** | [1.9.1](https://github.com/kubernetes/kops/releases/tag/1.9.1) |           1.9.6            | June03, 2018 |
 
 ### Agenda
 
