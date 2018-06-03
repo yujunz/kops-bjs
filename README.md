@@ -22,18 +22,12 @@ This tutorial will walk you through building a Kubernetes cluster with [Kops](ht
 
 Check the latest AMI ID from [Kops Images](https://github.com/kubernetes/kops/blob/master/docs/images.md) document and find the AMI ID in the global regions(e.g. N. Virginia).
 
-For example, you can find the latest CoreOS AMI in us-esat-1 like this:
+However, as the China Beijing region already has latest CoreOS AMI, you can just check [CoreOS official EC2 AMI page](https://coreos.com/os/docs/latest/booting-on-ec2.html) and select the AMI for `cn-north-1` region, make sure you select the `HVM` AMI type. For example, current AMI ID is **ami-555a8438** ([Container Linux 1745.5.0](https://coreos.com/os/docs/1745.5.0/index.html)). Please note the latest AMI ID may change over time.
 
-```bash
-$ curl -s https://coreos.com/dist/aws/aws-stable.json | jq -r '.["us-east-1"].hvm'
-ami-9e2685e3
-```
-
-Then follow [this comment](https://github.com/kubernetes-incubator/kube-aws/pull/390#issue-212435055) to copy the AMI from us-west-1 to China Beijing region.
-
-#### Recommended Approach
-
-However, as the China Beijing region already has latest CoreOS AMI, you can just check [CoreOS official EC2 AMI page](https://coreos.com/os/docs/latest/booting-on-ec2.html) and select the AMI for `cn-north-1` region, make sure you select the `HVM` AMI type. For example, current AMI ID is **ami-39ee3154** ([CoreOS 1688.5.3](https://coreos.com/os/docs/1688.5.3/index.html)). Please note the latest AMI ID may change over time.
+|         Region         |                          CoreOS AMI                          |
+| :--------------------: | :----------------------------------------------------------: |
+|  Beijing(cn-north-1)   | [ami-555a8438](https://console.amazonaws.cn/ec2/home?region=cn-north-1#launchAmi=ami-555a8438) |
+| NinXia(cn-northwest-1) | [ami-06a0b464](https://console.amazonaws.cn/ec2/home?region=cn-northwest-1#launchAmi=ami-06a0b464) |
 
 
 
@@ -66,15 +60,13 @@ Depending on which region you woud like to provision your Kops cluster, click th
 
 
 
-
-
 ### Create the cluster with Kops
 
 update `create_cluster.sh` and modify the variables:
 
 ```bash
 cluster_name='cluster.bjs.k8s.local'
-ami='ami-39ee3154'
+ami='ami-xxxxxxxx'
 vpcid='vpc-c1e040a5'  
 ```
 

@@ -1,4 +1,6 @@
 spec:
+  assets:
+    fileRepository: https://s3.cn-north-1.amazonaws.com.cn/kops-bjs/fileRepository/
   hooks:
   - name: update-engine.service
     disabled: true
@@ -24,13 +26,13 @@ spec:
   masterKubelet:
     podInfraContainerImage: anjia0532/pause-amd64:3.0
   kubeControllerManager:
-    image: anjia0532/kube-controller-manager:v1.9.3
+    image: anjia0532/kube-controller-manager:v1.9.6
   kubeScheduler:
-    image: anjia0532/kube-scheduler:v1.9.3
+    image: anjia0532/kube-scheduler:v1.9.6
   kubeProxy:
-    image: anjia0532/kube-proxy:v1.9.3
+    image: anjia0532/kube-proxy:v1.9.6
   kubeAPIServer:
-    image: anjia0532/kube-apiserver:v1.9.3
+    image: anjia0532/kube-apiserver:v1.9.6
   docker:
     logDriver: ""
     registryMirrors:
