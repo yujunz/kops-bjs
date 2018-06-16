@@ -97,6 +97,13 @@ Parameters:
     Type: Number
     Default: 1
     Description: How many copies of the service task to run
+  LogToCloudWatchLogs:
+    Type: String
+    Default: "no"
+    AllowedValues: 
+      - "yes"
+      - "no"
+    Description: enable ECS logging to CloudWatch Logs for debugging
   SSPassword:
     Type: String
     Default: ChangeMe
@@ -119,6 +126,8 @@ Parameters:
 Conditions:
   HasCustomRole: !Not [ !Equals [!Ref 'Role', ''] ]
   CreateVPC:  !Equals [!Ref 'VpcId', '']
+  CWL: !Equals [!Ref 'LogToCloudWatchLogs', 'yes']
+  NOCWL: !Equals [!Ref 'LogToCloudWatchLogs', 'no']
 
 
 Resources:
@@ -241,9 +250,9 @@ Resources:
       IpProtocol: tcp
       FromPort: '443'
       ToPort: '443'
-      # for ip targets of NLB, the targets will see NLB private IP as the client IP
-      # make sure to allow all NLB private IP addresses come in
-      CidrIp: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
+      # ECS Task for gost service behind NLB should allow public access
+      # CidrIp: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
+      CidrIp: 0.0.0.0/0
   EcsSecurityGroupIngressFromSelf:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -378,7 +387,18 @@ Resources:
 
   # The task definition. This is a simple metadata description of what
   # container to run, and what resource requirements it has.
-  TaskDefinition:
+
+  
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      LogGroupName: !Sub "/ecs/${ServiceName}-${AWS::StackName}"
+      RetentionInDays: 3
+
+  TaskDefinitionCWL:
+    Condition: CWL
+    DependsOn: 
+      - LogGroup
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: !Ref 'ServiceName'
@@ -406,6 +426,47 @@ Resources:
             - -D
             # - !Sub "-L=https://:${ContainerPort}"
             - !Sub "-L=ss+tls://chacha20:${SSPassword}@:${ContainerPort}"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref AWS::Region
+              awslogs-group: !Ref LogGroup
+              awslogs-stream-prefix: ecs
+
+
+
+
+  TaskDefinitionNOCWL:
+    Condition: NOCWL
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Ref 'ServiceName'
+      Cpu: !Ref 'ContainerCpu'
+      Memory: !Ref 'ContainerMemory'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn: !Ref ECSTaskExecutionRole
+        # Fn::ImportValue:
+        #   !Join [':', [!Ref 'StackName', 'ECSTaskExecutionRole']]
+      TaskRoleArn:
+        Fn::If:
+          - 'HasCustomRole'
+          - !Ref 'Role'
+          - !Ref "AWS::NoValue"
+      ContainerDefinitions:
+        - Name: !Ref 'ServiceName'
+          Cpu: !Ref 'ContainerCpu'
+          Memory: !Ref 'ContainerMemory'
+          Image: !Ref 'ImageUrl'
+          PortMappings:
+            - ContainerPort: !Ref 'ContainerPort'
+          Command:
+            - -D
+            # - !Sub "-L=https://:${ContainerPort}"
+            - !Sub "-L=ss+tls://chacha20:${SSPassword}@:${ContainerPort}"
+
+
 
   # The service. The service is a resource which allows you to run multiple
   # copies of a type of task, and gather up their logs and metrics, as well
@@ -444,7 +505,11 @@ Resources:
             #     !Join [':', [!Ref 'StackName', 'PublicSubnetOne']]
             # - Fn::ImportValue:
             #     !Join [':', [!Ref 'StackName', 'PublicSubnetTwo']]
-      TaskDefinition: !Ref 'TaskDefinition'
+      TaskDefinition: 
+        !If
+          - NOCWL
+          - !Ref 'TaskDefinitionNOCWL'
+          - !Ref 'TaskDefinitionCWL'
       LoadBalancers:
         - ContainerName: !Ref 'ServiceName'
           ContainerPort: !Ref 'ContainerPort'
