@@ -31,7 +31,6 @@ All scripts for Kops fast bootstrapping in NinXia(cn-northwest-1) region.
 
    ```
 
-   
 
 5. edit your cluster
 
@@ -45,6 +44,8 @@ All scripts for Kops fast bootstrapping in NinXia(cn-northwest-1) region.
 
 ```
 spec:
+  assets:
+    fileRepository: https://s3.cn-north-1.amazonaws.com.cn/kops-bjs/fileRepository/
   hooks:
   - name: update-engine.service
     disabled: true
@@ -70,13 +71,13 @@ spec:
   masterKubelet:
     podInfraContainerImage: anjia0532/pause-amd64:3.0
   kubeControllerManager:
-    image: anjia0532/kube-controller-manager:v1.9.3
+    image: anjia0532/kube-controller-manager:v1.9.8
   kubeScheduler:
-    image: anjia0532/kube-scheduler:v1.9.3
+    image: anjia0532/kube-scheduler:v1.9.8
   kubeProxy:
-    image: anjia0532/kube-proxy:v1.9.3
+    image: anjia0532/kube-proxy:v1.9.8
   kubeAPIServer:
-    image: anjia0532/kube-apiserver:v1.9.3
+    image: anjia0532/kube-apiserver:v1.9.8
   docker:
     logDriver: ""
     registryMirrors:
@@ -128,7 +129,7 @@ May 07 14:13:10 ip-172-31-55-1.cn-north-1.compute.internal update_engine[725]: I
 
 
 
-When all the three master nodes under `ELB` become healthy, you may access your cluster with `kubectl`. Typically it would take `8-15` minutes to become all healthy.
+When all the three master nodes under `ELB` become healthy, you may access your cluster with `kubectl`. Typically it would take `5-8` minutes to become all healthy.
 
 
 

@@ -53,44 +53,50 @@ The enchancements including:
    For example:
 
    ```
-   # Please edit the object below. Lines beginning with a '#' will be ignored,
-   # and an empty file will abort the edit. If an error occurs while saving this file will be
-   # reopened with the relevant failures.
-   #
-   apiVersion: kops/v1alpha2
-   kind: Cluster
-   metadata:
-     creationTimestamp: 2018-05-07T12:26:21Z
-     name: cluster.bjs.k8s.local
    spec:
+     assets:
+       fileRepository: https://s3.cn-north-1.amazonaws.com.cn/kops-bjs/fileRepository/
      hooks:
      - name: update-engine.service
        disabled: true
      etcdClusters:
-       events:
-         image: anjia0532/etcd:2.2.1
-       main:
-         image: anjia0532/etcd:2.2.1
+     - etcdMembers:
+       - instanceGroup: master-cn-north-1a-1
+         name: a-1
+       - instanceGroup: master-cn-north-1b-1
+         name: b-1
+       - instanceGroup: master-cn-north-1a-2
+         name: a-2
+       image: anjia0532/etcd:2.2.1
+       name: main
+     - etcdMembers:
+       - instanceGroup: master-cn-north-1a-1
+         name: a-1
+       - instanceGroup: master-cn-north-1b-1
+         name: b-1
+       - instanceGroup: master-cn-north-1a-2
+         name: a-2
+       image: anjia0532/etcd:2.2.1
+       name: events
      masterKubelet:
        podInfraContainerImage: anjia0532/pause-amd64:3.0
      kubeControllerManager:
-       image: anjia0532/kube-controller-manager:v1.9.3
+       image: anjia0532/kube-controller-manager:v1.9.8
      kubeScheduler:
-       image: anjia0532/kube-scheduler:v1.9.3
+       image: anjia0532/kube-scheduler:v1.9.8
      kubeProxy:
-       image: anjia0532/kube-proxy:v1.9.3
+       image: anjia0532/kube-proxy:v1.9.8
      kubeAPIServer:
-       image: anjia0532/kube-apiserver:v1.9.3
+       image: anjia0532/kube-apiserver:v1.9.8
      docker:
        logDriver: ""
        registryMirrors:
            - https://registry.docker-cn.com
      egressProxy:
        httpProxy:
-         host: <your_http_proxy_host>
+         host: <host>
          port: 8888
        excludes: amazonaws.com.cn,amazonaws.cn,aliyun.cn,aliyuncs.com,registry.docker-cn.com
-   [...]
    ```
 
 6. Finally, update your cluster with `—yes`
@@ -125,7 +131,7 @@ May 07 14:13:10 ip-172-31-55-1.cn-north-1.compute.internal update_engine[725]: I
 
 
 
-When all the three master nodes under `ELB` become healthy, you may access your cluster with `kubectl`. Typically it would take `8-15` minutes to become all healthy.
+When all the three master nodes under `ELB` become healthy, you may access your cluster with `kubectl`. Typically it would take `5-8` minutes to become all healthy.
 
 
 
