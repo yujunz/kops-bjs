@@ -6,7 +6,11 @@ This tutorial will walk you through building a Kubernetes cluster with [Kops](ht
 | :----------------: | :----------------------------------------------------------: | :------------------------: | --------------- |
 | **pahud/kops-bjs** | [1.9.2](https://github.com/kubernetes/kops/releases/tag/1.9.2) |           1.9.8            | July 24th, 2018 |
 
-### Agenda
+![](/Users/hunhsieh/Documents/kops-bjs.png)
+
+
+
+### HOWTO
 
 **Prepare the AMI** 
 
