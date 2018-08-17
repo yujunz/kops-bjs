@@ -1,10 +1,10 @@
 # Kops-BJS
 
-This tutorial will walk you through building a Kubernetes cluster with [Kops](https://github.com/kubernetes/kops) in AWS Beijing or NinXia Region.
+This tutorial will walk you through building a Kubernetes cluster with [Kops](https://github.com/kubernetes/kops) in AWS Beijing or NingXia Region.
 
-|        Name        |                     Support Kops Version                     | Support Kubernetes Version | Last Update     |
-| :----------------: | :----------------------------------------------------------: | :------------------------: | --------------- |
-| **pahud/kops-bjs** | [1.9.2](https://github.com/kubernetes/kops/releases/tag/1.9.2) |           1.9.8            | July 24th, 2018 |
+|        Name        |                     Support Kops Version                     | Support Kubernetes Version | Last Update    |
+| :----------------: | :----------------------------------------------------------: | :------------------------: | -------------- |
+| **pahud/kops-bjs** | [1.10.0](https://github.com/kubernetes/kops/releases/tag/1.10.0) |           1.10.3           | Aug 17th, 2018 |
 
 ![](./images/kops-bjs.png)
 
@@ -28,12 +28,12 @@ This tutorial will walk you through building a Kubernetes cluster with [Kops](ht
 
 Check the latest AMI ID from [Kops Images](https://github.com/kubernetes/kops/blob/master/docs/images.md) document and find the AMI ID in the global regions(e.g. N. Virginia).
 
-However, as the China Beijing region already has latest CoreOS AMI, you can just check [CoreOS official EC2 AMI page](https://coreos.com/os/docs/latest/booting-on-ec2.html) and select the AMI for `cn-north-1` region, make sure you select the `HVM` AMI type. For example, current AMI ID is **ami-2a875e47** ([Container Linux 1745.7.0](https://coreos.com/os/docs/1745.7.0/index.html)). Please note the latest AMI ID may change over time.
+However, as the China Beijing region already has latest CoreOS AMI, you can just check [CoreOS official EC2 AMI page](https://coreos.com/os/docs/latest/booting-on-ec2.html) and select the AMI for `cn-north-1` region, make sure you select the `HVM` AMI type. For example, current AMI ID is **ami-0d5ec5d735beb907e** ([Container Linux 1800.7.0](https://coreos.com/os/docs/1800.7.0/index.html)). Please note the latest AMI ID may change over time.
 
-|         Region         |    CoreOS AMI    |
-| :--------------------: | :--------------: |
-|  Beijing(cn-north-1)   | **ami-2a875e47** |
-| NinXia(cn-northwest-1) | **ami-c9abbfab** |
+|         Region          |        CoreOS AMI         |
+| :---------------------: | :-----------------------: |
+|   Beijing(cn-north-1)   | **ami-0d5ec5d735beb907e** |
+| NingXia(cn-northwest-1) | **ami-02a5768104b4e8d4c** |
 
 
 
@@ -53,16 +53,16 @@ click the button to create a proxy server with [gost](https://github.com/ginuerz
 
 
 
-### Create a proxy forwarder in AWS Beijing or Ninxia Region
+### Create a proxy forwarder in AWS Beijing or Ningxia Region
 
 Depending on which region you woud like to provision your Kops cluster, click the button below to create an internal **http_proxy forwarder** for your Kops cluster. This template will create one t2.micro EC2 behind ELB in your existing VPC as the proxy forwarder.
 
 
 
-|           Region            |                     Launch Stack in VPC                      | Runtime |
-| :-------------------------: | :----------------------------------------------------------: | :-----: |
-|  **Beijing** (cn-north-1)   | [![cloudformation-launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.amazonaws.cn/cloudformation/home?region=cn-north-1#/stacks/new?stackName=kops-proxy&templateURL=https://s3.cn-north-1.amazonaws.com.cn/kops-bjs/cloudformation/bjs.yml) | EC2+ELB |
-| **NinXia** (cn-northwest-1) | [![cloudformation-launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.amazonaws.cn/cloudformation/home?region=cn-northwest-1#/stacks/new?stackName=kops-proxy&templateURL=https://s3.cn-north-1.amazonaws.com.cn/kops-bjs/cloudformation/bjs.yml) | EC2+ELB |
+|            Region            |                     Launch Stack in VPC                      | Runtime |
+| :--------------------------: | :----------------------------------------------------------: | :-----: |
+|   **Beijing** (cn-north-1)   | [![cloudformation-launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.amazonaws.cn/cloudformation/home?region=cn-north-1#/stacks/new?stackName=kops-proxy&templateURL=https://s3.cn-north-1.amazonaws.com.cn/kops-bjs/cloudformation/bjs.yml) | EC2+ELB |
+| **NingXia** (cn-northwest-1) | [![cloudformation-launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.amazonaws.cn/cloudformation/home?region=cn-northwest-1#/stacks/new?stackName=kops-proxy&templateURL=https://s3.cn-north-1.amazonaws.com.cn/kops-bjs/cloudformation/bjs.yml) | EC2+ELB |
 
 
 
@@ -70,10 +70,10 @@ Depending on which region you woud like to provision your Kops cluster, click th
 
 Depending on what region you intend to deploy your Kops, follow the `fastboot guide` below to continue your setup.
 
-|           Region           |                            Guide                             |
-| :------------------------: | :----------------------------------------------------------: |
-|  **Beijing**(cn-north-1)   | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/bjs-fastboot) |
-| **NinXia**(cn-northwest-1) | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/zhy-fastboot) |
+|           Region            |                            Guide                             |
+| :-------------------------: | :----------------------------------------------------------: |
+|   **Beijing**(cn-north-1)   | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/bjs-fastboot) |
+| **NingXia**(cn-northwest-1) | [fastboot guide](https://github.com/pahud/kops-bjs/tree/master/zhy-fastboot) |
 
 ### clean up
 
