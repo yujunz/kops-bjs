@@ -7,14 +7,16 @@ cluster_name='cluster.bjs.k8s.local'
 # official CoreOS AMI
 #ami='ami-39ee3154'
 #ami='ami-555a8438'
-ami='ami-2a875e47'
+#ami='ami-2a875e47'
+# CoreOS 1800.7.0
+ami='ami-0d5ec5d735beb907e'
 
 
 # change this to your vpcid
 vpcid='vpc-c1e040a5'
 
-KUBERNETES_VERSION='v1.9.8'
-KOPS_VERSION='1.9.2'
+KUBERNETES_VERSION='v1.10.3'
+KOPS_VERSION='1.10.0'
 kubernetesVersion="https://s3.cn-north-1.amazonaws.com.cn/kubernetes-release/release/$KUBERNETES_VERSION"
 
 #export CNI_VERSION_URL="https://s3.cn-north-1.amazonaws.com.cn/kubernetes-release/network-plugins/cni-plugins-amd64-v0.6.0.tgz"
