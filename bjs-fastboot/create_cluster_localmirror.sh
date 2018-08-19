@@ -13,7 +13,7 @@ ami='ami-0d5ec5d735beb907e'
 
 
 # change this to your vpcid
-vpcid='vpc-c1e040a5'
+vpcid='vpc-a52e63c1'
 
 KUBERNETES_VERSION='v1.10.3'
 KOPS_VERSION='1.10.0'
